@@ -3,6 +3,10 @@ package com.corphish.tsp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by avinabadalal on 21/07/17.
  * Instance based non-persistent shared preference
@@ -26,6 +30,11 @@ public class TemporarySharedPreference {
     private boolean manualMode = false;
 
     /*
+     * Timestamp key
+     */
+    private final String timeStampKey = "timeStamp";
+
+    /*
      * Constructor, accepts only context
      */
     public TemporarySharedPreference(Context context) {
@@ -42,6 +51,7 @@ public class TemporarySharedPreference {
         this.manualMode = manualMode;
 
         if (!manualMode) clearPreferences();
+        else checkTimeStamps();
     }
 
     /*
@@ -55,6 +65,7 @@ public class TemporarySharedPreference {
      * Returns shared preference editor
      */
     public SharedPreferences.Editor getSharedPreferenceEditor() {
+        applyTimeStamp();
         return getSharedPreferences().edit();
     }
 
@@ -64,5 +75,27 @@ public class TemporarySharedPreference {
      */
     public void clearPreferences() {
         getSharedPreferenceEditor().clear().apply();
+    }
+
+    /*
+     * Will get date in YYYYMMDD format, to be used in attaching timestamp in preference
+     */
+    private int getSimpleDate() {
+        return Integer.parseInt(new SimpleDateFormat("YYYYMMDD",Locale.ENGLISH).format(new Date()));
+    }
+
+    /*
+     * Will apply timestamp to preference
+     */
+    private void applyTimeStamp() {
+        getSharedPreferences().edit().putInt(timeStampKey, getSimpleDate()).apply();
+    }
+
+    /*
+     * Will check timestamps, and will clear preferences if its old
+     */
+    private void checkTimeStamps() {
+        if (getSharedPreferences().getInt(timeStampKey, 0) < getSimpleDate())
+            clearPreferences();
     }
 }
