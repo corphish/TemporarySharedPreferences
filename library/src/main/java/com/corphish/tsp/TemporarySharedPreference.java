@@ -21,7 +21,7 @@ public class TemporarySharedPreference {
     /*
      * Preference key
      */
-    private final String prefKey = "tspPrefs";
+    private static final String prefKey = "tspPrefs";
 
     /*
      * Whether or not to manually clearPreferences
@@ -75,6 +75,10 @@ public class TemporarySharedPreference {
      */
     public void clearPreferences() {
         getSharedPreferenceEditor().clear().apply();
+    }
+
+    public static void clearPreferences(Context context) {
+        context.getSharedPreferences(prefKey, Context.MODE_PRIVATE).edit().clear().apply();
     }
 
     /*
