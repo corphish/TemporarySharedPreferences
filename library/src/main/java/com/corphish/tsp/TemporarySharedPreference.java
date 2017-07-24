@@ -85,7 +85,7 @@ public class TemporarySharedPreference {
      * Will get date in YYYYMMDD format, to be used in attaching timestamp in preference
      */
     private int getSimpleDate() {
-        return Integer.parseInt(new SimpleDateFormat("YYYYMMDD",Locale.ENGLISH).format(new Date()));
+        return Integer.parseInt(new SimpleDateFormat("yyyyMMdd",Locale.ENGLISH).format(new Date()));
     }
 
     /*
